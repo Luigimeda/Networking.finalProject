@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scie Luminose con Scroll</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Sfondo fisso */
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Il canvas resta fisso e copre tutta la finestra */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Mantiene il canvas dietro il contenuto */
+        }
+        
+        h2 {
+            font-size: 37px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 162, 255, 0.8);
+        }
+        
+        h3 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 162, 255, 0.8);
+        }
+        
+        /* Contenitore con margine per permettere lo scroll */
+        .content {
+            position: relative;
+            z-index: 1; /* Lo mantiene sopra lo sfondo */
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 162, 255, 0.8);
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Aggiunge più spazio per lo scroll */
+        .spacer {
+            height: 100vh; /* Aggiunge altezza extra per testare lo scroll */
+        }
+
+        .btn {
+            display: inline-block;
+            
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.6);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="content">
+        <h1>Dettagli del progetto</h1>
+        <p>Il mio progetto propone una serie di router connessi tramite porta seriale.</p>
+        <p>Ognuno di questi router rappresenta una sede diversa di un'ipotetica azienda internazionale che ha bisogno di cominicazione tra le varie strutture. </p>
+        <p>Ad ogni router è connesso uno o più switch, ognuno dei quali si occupa di distribuire informazioni a reti diverse, pertanto, nel progetto sono presenti un totale di 6 reti private. </p>
+        <p>Ogni rete privata è stata soggetta a indirizzamento IP manuale, cosi come è stato per il routing statico.</p>
+        <h2>Di seguito riportate le informazioni principali:</h2>
+         
+        <h3>ROUTER 0:</h3>
+        <p>RETI PRIVATE: 192.168.1.0 (Fa0) e 192.168.4.0 (Fa1)</p>
+        <p>PORTE SERIALI: 200.100.50.1 (Se2) e 200.100.70.1 (Se3)</p>
+
+        <h3>ROUTER 1:</h3>
+        <p>RETI PRIVATE: 192.168.2.0 (Fa0)</p>
+        <p>PORTE SERIALI: 200.100.50.2 (Se2) e 200.100.60.2 (Se3)</p>
+        
+        <h3>ROUTER 2:</h3>
+        <p>RETI PRIVATE: 192.168.5.0 (Fa0)</p>
+        <p>PORTE SERIALI: 200.100.70.3 (Se2), 200.100.60.1 (Se3) e 200.100.80.1 (Se6)</p>
+
+        <h3>ROUTER 3:</h3>
+        <p>RETI PRIVATE: 192.168.6.0 (Fa0) e 192.168.3.0</p>
+        <p>PORTE SERIALI: 200.100.8.2 (Se2)</p>
+
+        <p>Il progetto propone minimi esempi di end devices per la verifica delle varie reti, ampliabili a piacimento con altri dispositivi e nuove reti.</p>
+        <p>Per maggiori dettagli scaricare il progetto nella homepage.</p>
+        <p>Grazie per l'attenzione.</p>
+    </div>
+    <a href="index4.html" class="btn">HOMEPAGE</a>
+
+    <div class="spacer"></div> <!-- Spazio extra per abilitare lo scroll -->
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(0, 162, 255, 0.8)";
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = "rgba(0, 162, 255, 0.2)";
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        initParticles();
+        animateParticles();
+    </script>
+
+</body>
+</html>
